@@ -83,3 +83,39 @@ func TestCaCountryNameExemptButComplientCrossSignedCa(t *testing.T) {
 		t.Errorf("%s: expected %s, got %s", inputPath, expected, out.Status)
 	}
 }
+
+func TestCaCountryNameNotIncluded(t *testing.T) {
+	inputPath := "caMissingCountry.pem"
+	expected := lint.NA
+	out := test.TestLint("e_ca_country_name_invalid", inputPath)
+	if out.Status != expected {
+		t.Errorf("%s: expected %s, got %s", inputPath, expected, out.Status)
+	}
+}
+
+func TestCaMultipleValidCountryName(t *testing.T) {
+	inputPath := "caMutlipleValidCountires.pem"
+	expected := lint.Pass
+	out := test.TestLint("e_ca_country_name_invalid", inputPath)
+	if out.Status != expected {
+		t.Errorf("%s: expected %s, got %s", inputPath, expected, out.Status)
+	}
+}
+
+func TestCaMultipleCountryNameOneInvalid(t *testing.T) {
+	inputPath := "caManyCountiresWithInvalid.pem"
+	expected := lint.Error
+	out := test.TestLint("e_ca_country_name_invalid", inputPath)
+	if out.Status != expected {
+		t.Errorf("%s: expected %s, got %s", inputPath, expected, out.Status)
+	}
+}
+
+func TestCaCountryNameInvalidButRequirementNotEffective(t *testing.T) {
+	inputPath := "caInvalidCountryButOld.pem"
+	expected := lint.NE
+	out := test.TestLint("e_ca_country_name_invalid", inputPath)
+	if out.Status != expected {
+		t.Errorf("%s: expected %s, got %s", inputPath, expected, out.Status)
+	}
+}
